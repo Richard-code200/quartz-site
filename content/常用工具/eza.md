@@ -8,11 +8,11 @@ modified: "2026-05-27T00:10:23+08:00"
 tags: ["常用工具"]
 ---
 
-`ls` 的现代替代品，更丰富的功能和更好的默认值。
+`eza` 是 `ls` 的现代替代工具，默认显示的信息和配色更丰富一些。
 
 ![eza demo gif](https://raw.githubusercontent.com/eza-community/eza/main/docs/images/screenshots.png)
 
-**eza** 使用颜色区分文件类型和元数据，可识别符号链接、扩展属性和 Git 状态。它**小巧**、**快速**，且只是**单个二进制文件**。
+eza 可以用颜色区分文件类型和元数据，也能显示符号链接、扩展属性和 Git 状态。它本身是一个独立的二进制程序。
 
 ## 相比 exa 新增的功能
 
@@ -40,7 +40,7 @@ nix run github:eza-community/eza -- -ol     # 传参
 
 ## 命令行选项
 
-eza 的选项与 `ls` 类似但不完全相同。快速概览：
+eza 的选项和 `ls` 有些相似，但并不完全一样，不能直接照搬。下面按用途记一下常用选项：
 
 ### 显示选项
 
@@ -121,8 +121,13 @@ eza 的选项与 `ls` 类似但不完全相同。快速概览：
 
 ## 自定义主题
 
-eza 支持 `theme.yml` 文件，可在此文件中指定所有 `LS_COLORS` 和 `EXA_COLORS` 环境变量的主题选项，还可以为不同文件类型和扩展名指定不同的图标。已有的环境变量设置仍然有效且优先级更高。
+eza 可以通过 `theme.yml` 调整颜色和图标，文件里能指定 `LS_COLORS` 和 `EXA_COLORS` 对应的主题选项。如果环境变量里也设置了同一项，环境变量的优先级更高。
 
 预置主题可在官方 [eza-themes](https://github.com/eza-community/eza-themes) 仓库中找到。
 
 主题文件需要放置在 `EZA_CONFIG_DIR` 环境变量指定的目录中，或默认在 `$XDG_CONFIG_HOME/eza` 下查找。详细说明请参阅 [man page](https://github.com/eza-community/eza/tree/main/man/eza_colors-explanation.5.md)。
+
+## 相关笔记
+
+- [Linux 的环境变量设计](Linux/linux的环境变量设计.md)：直接输入命令名时，shell 如何找到程序。
+- [find 与 fd](常用工具/find_fd.md)：列出目录之外，按条件查找文件。

@@ -14,7 +14,7 @@ tags: ["常用工具"]
 ssh late.sh
 ```
 
-`late.sh` 是一个终端优先的社交应用，包含实时聊天、音乐、游戏、新闻和个人资料。通过 SSH 客户端即可进入共享空间。以下整理功能和运行方式，自部署步骤仅作参考。
+`late.sh` 把聊天、音乐、游戏、新闻和个人资料这些功能放进了终端，通过 SSH 就能连接到共享空间。这里记一下功能和运行方式，自部署步骤先留作参考。
 
 ## 功能包含
 
@@ -55,7 +55,7 @@ ssh localhost -p 2222
 
 ## 伴随 CLI
 
-安装伴随 CLI 以获取本地音频播放和同步可视化功能：
+除了 SSH 界面，还有一个配套 CLI，用来在本地播放音频和同步可视化：
 
 macOS / Linux / Termux：
 
@@ -86,7 +86,7 @@ cargo build --release --bin late
 
 ## 本地开发
 
-如果不想用 Docker 包裹 Rust 构建过程，可以在 Docker 中运行基础设施组件，而应用本体则在本地原生运行：
+本地开发时，也可以只把基础设施放进 Docker，Rust 应用本身留在本机运行，不必把整个构建过程都放进容器：
 
 ```bash
 docker compose up -d postgres icecast liquidsoap
@@ -94,7 +94,7 @@ cargo run -p late-ssh
 cargo run -p late-web
 ```
 
-本地主机开发可以使用 Cargo 的正常默认配置，包括标准的仓库本地 `target/` 目录。`/app/target` 路径仅用于 Docker/开发容器。
+本机开发可以照常使用 Cargo 的默认配置，构建结果放在仓库本地的 `target/` 里。`/app/target` 只是 Docker／开发容器中的路径。
 
 ```bash
 export CARGO_HOME=$HOME/.cargo
@@ -104,11 +104,15 @@ export CARGO_HOME=$HOME/.cargo
 
 ## 验证
 
-提交 PR 前先运行：
+如果准备向上游提交 PR，可以先运行：
 
 ```bash
 make check
 ```
 
-这将运行 `cargo fmt --check`、`cargo clippy` 和 `cargo nextest`。
- 部分集成测试需要通过 testcontainers 使用 Docker。
+它会依次运行 `cargo fmt --check`、`cargo clippy` 和 `cargo nextest`。
+部分集成测试通过 testcontainers 使用 Docker，跑这部分时还需要有可用的 Docker 环境。
+
+## 相关笔记
+
+- [Cargo 工作区与依赖管理](Rust/Cargo工作区与依赖管理.md)：多个 crate 放在同一个 workspace 里的组织方式。

@@ -8,7 +8,7 @@ modified: "2026-05-25T23:57:52+08:00"
 tags: ["常用工具"]
 ---
 
-`bat` 类似 `cat`，多了 Git 集成和语法高亮。
+`bat` 用起来和 `cat` 类似，不过多了语法高亮和 Git 集成，查看源码时更方便。
 
 ## 优点
 
@@ -32,15 +32,15 @@ tags: ["常用工具"]
 
 ### 自动分页
 
-`bat`会在一般情况下将大于屏幕可显示范围的内容输出到分页器(pager, e.g. `less`)。
+`bat` 一般会把一屏放不下的内容交给分页器（pager，比如 `less`），方便上下翻看。
 
 不需要分页时，加上 `--paging=never`，像 `cat` 一样直接输出。
 给 `cat` 设置别名时，可以在 shell 配置文件中添加 `alias cat='bat --paging=never'`。
 
 #### 智能输出
 
-`bat`能够在设置了分页器选项的同时进行管道:wink:。
-当`bat`检测到当前环境为非可交互终端或管道时（例如使用`bat`并将内容用管道输出到文件），`bat`会像`cat`一样，一次输出文件内容为纯文本且无视`--paging`参数。
+`bat` 也会根据输出的位置调整显示方式，不是设置了分页器就一定分页。
+当 `bat` 检测到输出不是交互终端，比如通过管道把 `bat` 的输出交给其他命令时，`bat` 会像 `cat` 一样输出纯文本，不显示额外的边栏，此时也会忽略 `--paging`。
 
 ## 如何使用
 
@@ -90,7 +90,7 @@ bat f - g  # 输出 f，接着是标准输入流，最后 g
 
 #### `fzf`
 
-`bat` 可以用作 `fzf` 的预览器。这需要在`bat`后添加`--color=always`选项，以及`--line-range` 选项来限制大文件的加载次数。
+给 `fzf` 加预览时，可以用 `bat` 来高亮显示文件。这里给 `bat` 加上 `--color=always`，保留预览中的颜色，再用 `--line-range` 限制读取范围，避免大文件拖慢预览。
 
 ```bash
 fzf --preview 'bat --color=always --style=numbers --line-range=:500 {}'
@@ -106,7 +106,7 @@ fzf --preview 'bat --color=always --style=numbers --line-range=:500 {}'
 find … -exec bat {} +
 ```
 
-亦或者在用`fd`时添加`-X`/`--exec-batch`选项：
+如果用的是 `fd`，也可以通过 `-X` / `--exec-batch` 把结果批量交给 bat：
 
 ```bash
 fd … -X bat
@@ -194,10 +194,10 @@ man 2 select
 
 ### 语法高亮主题
 
-使用 `bat --list-themes` 一份语法高亮主题的清单，然后用`--theme=TwoDark`来指定主题为`TwoDark`，也可以通过设置`BAT_THEME`环境变量来选定主题。
-把`export BAT_THEME="TwoDark"`添加到 shell 的启动脚本（shell startup file）来取得永久效果。或者使用`bat`的[配置文件](#配置文件)
+用 `bat --list-themes` 可以列出主题，再用 `--theme=TwoDark` 指定主题为 `TwoDark`。经常使用同一个主题时，也可以设置 `BAT_THEME` 环境变量。
+把 `export BAT_THEME="TwoDark"` 放进 shell 的启动脚本，就不用每次手动设置。也可以写进 `bat` 的[配置文件](#配置文件)。
 
-若想要查看所有主题在一个文件上的显示效果可以用一下命令（需要安装`fzf`）：
+想比较各个主题在同一份文件上的效果，可以用下面的命令，需要先装好 `fzf`：
 
 ```bash
 bat --list-themes | fzf --preview="bat --theme={} --color=always /path/to/file"
@@ -216,9 +216,9 @@ bat --list-themes | fzf --preview="bat --theme={} --color=always /path/to/file"
 - `base16-25`专为 [base16-shell](https://github.com/tinted-theming/base16-shell) 设计。
   它把部分亮色替换为 8-bit 色彩。使用前先确认 256 色终端是否采用 base16-shell。
 
-尽管这些主题具有诸多限制，但具有一些 truecolor 主题不具有的三个优点：
+这些主题能用的颜色比较少，不过也有一些 truecolor 主题不一定具备的优点：
 
-- 享有最佳兼容性。并不是所有终端工具都支持高于 3-bit 的色彩。
+- 兼容性更好，不是所有终端工具都支持高于 3-bit 的色彩。
 - 适应终端主题。
 - 视觉上和其他的终端工具更协调。
 
@@ -313,7 +313,7 @@ bat cache --build
 export BAT_PAGER="less -RF"
 ```
 
-除了使用环境变量来改变`bat`使用的的分页器，也可以在配置文件中提供`--pager`参数。
+除了通过环境变量选择 `bat` 的分页器，也可以在配置文件里写 `--pager`。
 
 注意：`bat`会把部分命令行参数直接传递给分页器：`-R`/`--RAW-CONTROL-CHARS`,`-F`/`--quit-if-one-screen`以及`-X`/`--no-init`（该参数仅适用于高于530版本的`less`）。
 其中`-R` 参数需要在解释 ANSI 标准颜色时起作用。`-F`则指示`less`在输出内容的垂直尺寸小于终端尺寸时立即退出。
@@ -354,7 +354,7 @@ bat --generate-config-file
 
 ### 格式
 
-配置文件其实是一份按行分割的命令行参数列表。完整参数和可用值见 `bat --help`。配置文件中`#`打头的行会被视为注释而不生效。
+配置文件其实就是一份按行写的命令行参数列表，可用的参数和值可以查 `bat --help`。以 `#` 开头的行是注释，不会生效。
 
 以下是一份示例：
 
@@ -371,3 +371,9 @@ bat --generate-config-file
 # 使用 C++ 语法来给 Arduino 的 .ino 文件提供高亮
 --map-syntax "*.ino:C++"
 ```
+
+## 相关笔记
+
+- [find 与 fd](常用工具/find_fd.md)：找出文件，再交给 bat 查看。
+- [grep 与 rg](常用工具/grep_rg.md)：先搜索内容，再查看命中位置附近的代码。
+- [Linux 的环境变量设计](Linux/linux的环境变量设计.md)：命令查找与环境变量的关系。

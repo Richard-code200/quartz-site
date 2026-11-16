@@ -8,9 +8,9 @@ modified: "2026-11-07T01:34:44+08:00"
 tags: ["常用工具"]
 ---
 
-`grep` 用于在文件内容或命令输出中搜索匹配的行，适合日常开发中的日志定位与代码查找。
+`grep` 可以在文件内容或者命令输出里找出匹配的行，平时查日志、找代码时经常用到。
 
-grep 与 rg 的用法放在一起对照，速查和示例分开。按名称、类型或路径找文件，见 [find 与 fd 笔记](常用工具/find_fd.md)。
+这里把 grep 和 rg 放在一起对照，先记速查，再放示例。如果要按文件名、类型或路径找文件，而不是搜内容，可以看[find 与 fd 笔记](常用工具/find_fd.md)。
 
 ## grep 速查
 
@@ -94,7 +94,7 @@ grep -rnF --exclude-dir=node_modules --exclude-dir=.git 'getUser' .
 grep -rnF --exclude-dir=vendor 'TODO' ./src
 ```
 
-`grep` 是文本搜索，不理解代码语法。匹配结果可能来自定义、调用、注释或字符串。它也不会自动遵守 `.gitignore`；需要时显式排除目录，或使用下文介绍的 `rg`。
+`grep` 只做文本匹配，并不理解代码语法，所以定义、调用、注释和字符串都可能命中。它也不会自动读取 `.gitignore`，需要时得自己排除目录，或者改用后面的 `rg`。
 
 ### 日志搜索
 
@@ -138,7 +138,7 @@ ls | grep 'TODO'
 grep -rlF 'TODO' ./src
 ```
 
-记住：**管道中的 grep 搜索上一个命令的输出；带文件参数的 grep 搜索文件内容。**
+这里要分清：**接在管道后的 grep 搜的是上一个命令的输出；带文件参数的 grep 才会读取对应文件的内容。**
 
 #### 不显示行号，不等于只显示文件名
 
@@ -172,7 +172,7 @@ grep -nE 'ERROR|WARN' logs/app.log
 
 ## rg（ripgrep）
 
-`ripgrep` 的命令名是 `rg`，是面向行的递归文本搜索工具，适合开发中的代码和日志搜索，支持 Windows、macOS 与 Linux。它不是完全兼容 `grep` 选项的替代品，不能直接照搬所有参数。
+`ripgrep` 的启动命令是 `rg`，默认就能递归搜索文本，适合查代码和日志，也支持 Windows、macOS 和 Linux。不过，它的参数并不完全兼容 `grep`，不能原样照搬。
 
 ### 速查
 
@@ -314,7 +314,7 @@ fd -t f -e log '' logs -X rg -HciF 'error'
 cd /home/errorichard/workspace/projects/learning/linux/tools-practice/datasets/basic
 ```
 
-复习时先不看速查表完成下面几题，再把命令和输出交给助手检查：
+复习时可以先不看速查表，独立写出下面几条命令，再对照输出检查：
 
 1. 搜索 `src` 及其子目录中的 `TODO`，显示文件路径和行号。
 2. 只列出 `src` 中内容包含 `TODO` 的文件名。
@@ -332,3 +332,8 @@ cd /home/errorichard/workspace/projects/learning/linux/tools-practice/datasets/b
 - [GNU grep 官方手册](https://www.gnu.org/software/grep/manual/grep.html)：模式语法、上下文和输出控制等完整说明。
 - `rg --help`：本机详细选项说明；`rg -h` 是简短版。
 - [ripgrep 官方指南](https://github.com/BurntSushi/ripgrep/blob/master/GUIDE.md)：默认过滤、glob 与高级使用说明。
+
+## 相关笔记
+
+- [grex](常用工具/grex.md)：根据样本生成正则，再用 rg 验证。
+- [命令行文件搜索实践](Rust/命令行文件搜索实践.md)：自己用 Rust 写一个简化的内容搜索工具。

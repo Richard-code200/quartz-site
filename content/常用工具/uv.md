@@ -8,7 +8,7 @@ modified: "2026-09-26T14:19:21+08:00"
 tags: ["常用工具"]
 ---
 
-uv 是一个用 Rust 编写的极快的 Python 包和项目管理器，由 [Astral](https://astral.sh)（Ruff 的开发者）出品。一个工具就能替代 `pip`、`pip-tools`、`pipx`、`poetry`、`pyenv`、`twine`、`virtualenv` 等多个工具，速度比 `pip` 快 10–100 倍。
+uv 是 [Astral](https://astral.sh)（Ruff 的开发者）用 Rust 写的 Python 包和项目管理工具。它把 `pip`、`pip-tools`、`pipx`、`poetry`、`pyenv`、`twine`、`virtualenv` 等工具的常见用途整合到了一起。官方给出的包安装速度对比是比 `pip` 快 10–100 倍，具体表现还要看缓存、网络和项目情况。
 
 
 > [!info] 本机环境（2026-09）
@@ -43,7 +43,7 @@ uv python upgrade 3.12            # 升级补丁版本（实验性功能）
 
 
 > [!info] 自动下载
-> 不需要提前安装：当 `uv venv`、`uv run` 等命令需要某个版本而本机没有时，uv 会自动下载。由于 Python 官方不发布可分发二进制，uv 使用 [python-build-standalone](https://github.com/astral-sh/python-build-standalone) 项目提供的发行版。
+> 用到某个 Python 版本时，不一定需要事先安装。`uv venv`、`uv run` 等命令发现本机缺少对应版本，就可以自动下载。uv 使用的是 [python-build-standalone](https://github.com/astral-sh/python-build-standalone) 提供的发行版，因为 Python 官方没有提供它所需的这类可分发二进制。
 
 
 其他要点：
@@ -117,7 +117,7 @@ uv pip sync requirements.txt
 uv pip compile requirements.in --output-file requirements.txt
 ```
 
-老项目先用 `uv pip` 过渡，新项目优先考虑 uv 的项目管理方式。
+老项目可以先从 `uv pip` 开始用，不必马上改整个项目；新项目则可以直接考虑 uv 的项目管理方式。
 
 ## 实用配置
 
@@ -163,3 +163,7 @@ uv run python main.py
 
 - [uv 官方文档](https://docs.astral.sh/uv/)
 - [uv GitHub 仓库](https://github.com/astral-sh/uv)
+
+## 相关笔记
+
+- [Linux 的环境变量设计](Linux/linux的环境变量设计.md)：uv 安装的工具命令与 PATH 的关系。
